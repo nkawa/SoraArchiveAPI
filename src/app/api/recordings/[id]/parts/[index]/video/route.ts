@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 import path from "path";
 import { loadParts, resolvePartVideoPath, openRangeStream } from "@/lib/sora_fs";
 
-export async function GET(req: Request, { params }: { params: { id: string; index: string } }) {
+export async function GET(req: Request, ctx:  { params: Promise<{ id: string; index: string }> }) {
   try {
-    const { id, index } = params; // index like "0001"
+    const { id, index } = await ctx.params; // index like "0001"
     const parts = await loadParts(id);
     const part = parts.find(p => p.split_index === index);
     if (!part) {

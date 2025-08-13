@@ -4,9 +4,9 @@ import fs from "fs/promises";
 import { SORA_ROOT } from "@/lib/sora_fs";
 import path from "path"; // ← 追加
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   try {
-    const id = params.id;
+    const {id} = await ctx.params
     // かんたんな入力バリデーション（ディレクトリトラバーサル対策）
     if (!/^[A-Za-z0-9_-]+$/.test(id)) {
       return NextResponse.json({ ok: false, error: "invalid id" }, { status: 400 });
